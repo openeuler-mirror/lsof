@@ -1,0 +1,12 @@
+diff --git a/Lsof.8 b/Lsof.8
+index 5ad6234..4453fb4 100644
+--- a/Lsof.8
++++ b/Lsof.8
+@@ -1,5 +1,5 @@
+ .so ./version
+-.TH LSOF 8 Revision-\*(VN
++.TH LSOF 1 Revision-\*(VN
+ \" Register )P is used neither by this file nor any groff macro.  However,
+ \" some versions of nroff require it.
+ .if !\n(.g \{\
+

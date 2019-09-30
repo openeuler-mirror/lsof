@@ -1,0 +1,92 @@
+From f8ff9c832d45d44007e936ad3110c227241612d8 Mon Sep 17 00:00:00 2001
+From: kangenbo <kangenbo@huawei.com>
+Date: Mon, 15 Apr 2019 16:38:23 -0400
+Subject: [PATCH 52/83] endpoint(pty),bug fix: list the same fd in a different process
+
+Description: This change is simillar to 28f96d58 (endpoint(pipe),fix: list the same
+fd in a different process).  28f96d58 is about pipe. This change is about pty.
+
+Source: backport patch from github, see following in detail:
+https://github.com/lsof-org/lsof-linux/commit/cea5e144ee6ac16fd0c82c0a7d25790d5f60b823
+
+---
+ dialects/linux/dnode.c | 10 +++++-----
+ proc.c                 |  4 ++--
+ proto.h                |  2 +-
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/dialects/linux/dnode.c b/dialects/linux/dnode.c
+index ddd99cf..ee12227 100644
+--- a/dialects/linux/dnode.c
++++ b/dialects/linux/dnode.c
+@@ -307,7 +307,8 @@ enter_ptmxi(mn)
+  */
+ 
+ pxinfo_t *
+-find_ptyepti(lf, m, pp)
++find_ptyepti(pid, lf, m, pp)
++	int pid;
+ 	struct lfile *lf;		/* pseudoterminal's lfile */
+ 	int m;				/* minor number type:
+ 					 *     0 == use tty_index
+@@ -319,6 +320,7 @@ find_ptyepti(lf, m, pp)
+ 	int h;				/* hash result */
+ 	INODETYPE mn;			/* minor number */
+ 	pxinfo_t *pi;			/* pseudoterminal info pointer */
++	struct lproc *ep;
+ 
+ 
+ 	mn = m ? GET_MIN_DEV(lf->rdev) : lf->tty_index;
+@@ -332,12 +334,10 @@ find_ptyepti(lf, m, pp)
+ 	    while (pi) {
+ 		if (pi->ino == mn) {
+ 		    ef = pi->lf;
+-		    if (((m && is_pty_ptmx(ef->rdev))
++		    ep = &Lproc[pi->lpx];
++		    if ((m && is_pty_ptmx(ef->rdev))
+ 		    ||  ((!m) && is_pty_slave(GET_MAJ_DEV(ef->rdev))))
+-		    &&   strcmp(lf->fd, ef->fd)
+-		    ) {
+ 			return(pi);
+-		    }
+ 		}
+ 		pi = pi->next;
+ 	     }
+diff --git a/proc.c b/proc.c
+index e4c3591..7fe3998 100644
+--- a/proc.c
++++ b/proc.c
+@@ -1443,7 +1443,7 @@ process_ptyinfo(f)
+ 		 */
+ 		    pc = 1;
+ 		    do {
+-			if ((pp = find_ptyepti(Lf, !mos, pp))) {
++			if ((pp = find_ptyepti(Lp->pid, Lf, !mos, pp))) {
+ 
+ 			/*
+ 			 * This pseudoterminal endpoint is linked to the
+@@ -1468,7 +1468,7 @@ process_ptyinfo(f)
+ 		    Lp->pss |= PS_SEC;
+ 		    pc = 1;
+ 		    do {
+-			if ((pp = find_ptyepti(Lf, !mos, pp))) {
++			if ((pp = find_ptyepti(Lp->pid, Lf, !mos, pp))) {
+ 			    prt_ptyinfo(pp, (mos && pc), 0);
+ 			    pp = pp->next;
+ 			    pc = 0;
+diff --git a/proto.h b/proto.h
+index 7f65d67..2df360a 100644
+--- a/proto.h
++++ b/proto.h
+@@ -122,7 +122,7 @@ _PROTOTYPE(extern void process_uxsinfo,(int f));
+ #  if	defined(HASPTYEPT)
+ _PROTOTYPE(extern void clear_ptyinfo,(void));
+ _PROTOTYPE(extern void enter_ptmxi,(int mn));
+-_PROTOTYPE(extern pxinfo_t *find_ptyepti,(struct lfile *lf,int m,pxinfo_t *pp));
++_PROTOTYPE(extern pxinfo_t *find_ptyepti,(int pid, struct lfile *lf,int m,pxinfo_t *pp));
+ _PROTOTYPE(extern int is_pty_slave,(int sm));
+ _PROTOTYPE(extern int is_pty_ptmx,(dev_t dev));
+ _PROTOTYPE(extern void process_ptyinfo,(int f));
+-- 
+1.8.3.1
+
