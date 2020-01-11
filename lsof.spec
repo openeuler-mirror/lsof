@@ -1,11 +1,10 @@
 Name:		lsof
 Version:	4.93.2
-Release:        2
+Release:        3
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
 Source0:	https://github.com/lsof-org/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Patch0:         PATCH-FIX-OPENEULER-man-page-section.patch
 Patch6002: 	0050-endpoint-pipe-fix-list-the-same-fd-in-a-different-pr.patch
 Patch6003: 	0052-endpoint-pty-bug-fix-list-the-same-fd-in-a-different.patch
 Patch6004: 	0060-endpoint-pseudoterminal-bug-fix-fix-wrong-Unix98-PTY.patch
