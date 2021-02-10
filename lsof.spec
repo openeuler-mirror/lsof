@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.93.2
-Release:        4
+Release:        5
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -46,6 +46,12 @@ install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
 %{_mandir}/man*/*
 
 %changelog
+* Wed Feb 10 2020 chenjialong<chenjialong@huawei.com> - 4.93.2-5
+- Type:NA
+- ID:NA
+- SUG:NA
+- DESC:rebuild.
+
 * Mon Oct 19 2020 yangshaoxing <yangshaoxing3@huawei.com> - 4.93.2-4
 - Handle ffff:ffff in ipv6 addr correctly
 
