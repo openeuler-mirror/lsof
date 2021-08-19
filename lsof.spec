@@ -1,12 +1,12 @@
 Name:		lsof
 Version:	4.94.0
-Release:        1
+Release:        2
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
 Source0:	https://github.com/lsof-org/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-BuildRequires:	gcc git libtirpc-devel libselinux-devel
+BuildRequires:	gcc libtirpc-devel libselinux-devel
 
 %description
 Lsof is a free, open-source, Unix administrative tool for displays information
@@ -21,7 +21,7 @@ Requires:	man
 The %{name}-help package contains doc files for %{name}.
 
 %prep
-%autosetup -n %{name}-%{version} -p1 -S git
+%autosetup -n %{name}-%{version} -p1
 
 %build
 ./Configure -n linux
@@ -42,6 +42,9 @@ install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
 %{_mandir}/man*/*
 
 %changelog
+* Mon Aug 02 2021 chenyanpanHW <chenyanpan@huawei.com> - 4.94.0-2
+- DESC: delete -S git from %autosetup, and delete BuildRequires git
+
 * Sat Jan 23 2021 zoulin <zoulin13@huawei.com> - 4.94.0-1
 - Type: enhancement
 - ID: NA
