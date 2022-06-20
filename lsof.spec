@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.94.0
-Release:        2
+Release:        3
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -33,6 +33,13 @@ install -p -m 0755 lsof %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_mandir}/man1
 install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
 
+%check
+pushd tests
+chmod u+w TestDB
+./Add2TestDB
+make test %{?_smp_mflags} DEBUG="%{optflags} -Wall -Wno-unused"
+popd
+
 %files
 %doc 00CREDITS
 %{_bindir}/%{name}
@@ -42,6 +49,9 @@ install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
 %{_mandir}/man*/*
 
 %changelog
+* Mon Jun 20 2022 renhongxun <renhongxun@h-partners.com> 4.94.0-3
+- enable check
+
 * Mon Aug 02 2021 chenyanpanHW <chenyanpan@huawei.com> - 4.94.0-2
 - DESC: delete -S git from %autosetup, and delete BuildRequires git
 
