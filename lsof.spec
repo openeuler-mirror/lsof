@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.94.0
-Release:        2
+Release:        3
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -26,12 +26,13 @@ The %{name}-help package contains doc files for %{name}.
 %build
 ./Configure -n linux
 %make_build DEBUG="%{build_cflags} -I/usr/include/tirpc" CFGL="%{build_ldflags} -L./lib -llsof -lselinux -ltirpc"
+soelim -r Lsof.8 > lsof.1
 
 %install
 mkdir -p %{buildroot}/%{_bindir}
 install -p -m 0755 lsof %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_mandir}/man1
-install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
+install -p -m 0644 lsof.1 %{buildroot}/%{_mandir}/man1/lsof.1
 
 %check
 pushd tests
@@ -49,6 +50,9 @@ popd
 %{_mandir}/man*/*
 
 %changelog
+* Fri Aug 05 2022 renhongxun <renhongxun@h-partners.com> 4.94.0-3
+- fix spec so that man lsof can execute correctly
+
 * Mon Jun 20 2022 renhongxun <renhongxun@h-partners.com> 4.94.0-2
 - enable check
 
