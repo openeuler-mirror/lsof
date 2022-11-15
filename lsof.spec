@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.94.0
-Release:        3
+Release:        4
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -50,10 +50,13 @@ popd
 %{_mandir}/man*/*
 
 %changelog
-* Fri Aug 05 2022 renhongxun <renhongxun@h-partners.com> 4.94.0-3
+* Tue Nov 15 2022 dongyuzhen <dongyuzhen@h-partners.com> - 4.94.0-4
+- fix the format error in changelog
+
+* Fri Aug 05 2022 renhongxun <renhongxun@h-partners.com> - 4.94.0-3
 - fix spec so that man lsof can execute correctly
 
-* Mon Jun 20 2022 renhongxun <renhongxun@h-partners.com> 4.94.0-2
+* Mon Jun 20 2022 renhongxun <renhongxun@h-partners.com> - 4.94.0-2
 - enable check
 
 * Sat Jan 23 2021 zoulin <zoulin13@huawei.com> - 4.94.0-1
