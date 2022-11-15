@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.93.2
-Release:        6
+Release:        7
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -9,6 +9,7 @@ Patch0: 	0050-endpoint-pipe-fix-list-the-same-fd-in-a-different-pr.patch
 Patch1: 	0052-endpoint-pty-bug-fix-list-the-same-fd-in-a-different.patch
 Patch2: 	0060-endpoint-pseudoterminal-bug-fix-fix-wrong-Unix98-PTY.patch
 Patch3: 	Handle-ffff-ffff-in-ipv6-addr-correctly.patch
+Patch4:		backport-Fill-the-buffer-using-pipe-communication-with-zero.patch
 
 BuildRequires:	gcc git libtirpc-devel libselinux-devel
 
@@ -47,6 +48,12 @@ install -p -m 0644 lsof.1 %{buildroot}/%{_mandir}/man1/lsof.1
 %{_mandir}/man*/*
 
 %changelog
+* Tue Nov 15 2022 Bin Hu <hubin73@huawei.com> - 4.93.2-7
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:fix valgrind error write to uninitialized bytes
+
 * Wed Aug 24 2022 yueyuankun<yueyuankun@kylinos.cn> - 4.93.2-6
 - Type:bugfix
 - ID:NA

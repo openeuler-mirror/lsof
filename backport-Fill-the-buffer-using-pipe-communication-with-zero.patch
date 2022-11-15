@@ -1,0 +1,59 @@
+From b14d947b3548df94456dd9831d5f969403daf9e4 Mon Sep 17 00:00:00 2001
+From: Masatake YAMATO <yamato@redhat.com>
+Date: Tue, 24 Dec 2019 21:26:26 +0900
+Subject: [PATCH] Fill the buffer using pipe communication with zero
+
+Lsof runs sub processes for implementing non-blocking
+stat, lstat, and readlink. Lsof main process uses pipes fo
+for coummunicating with the sub processes.
+
+Valgrind reports a buffer used in the pipe communication
+isn't initialized:
+
+    $ sudo valgrind -v --track-origins=yes ./lsof  > /dev/null
+    ==13857== Memcheck, a memory error detector
+    ==13857== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+    ==13857== Using Valgrind-3.14.0-353a3587bb-20181007X and LibVEX; rerun with -h for copyright info
+    ==13857== Command: ./lsof
+    ...
+    ==13858== Rerun with --leak-check=full to see details of leaked memory
+    ==13858==
+    ==13858== ERROR SUMMARY: 199 errors from 1 contexts (suppressed: 0 from 0)
+    ==13858==
+    ==13858== 199 errors in context 1 of 1:
+    ==13858== Syscall param write(buf) points to uninitialised byte(s)
+    ==13858==    at 0x5380E34: write (write.c:27)
+    ==13858==    by 0x41E477: doinchild (misc.c:369)
+    ==13858==    by 0x41FB11: Readlink (misc.c:1108)
+    ==13858==    by 0x403FBD: readmnt (dmnt.c:512)
+    ==13858==    by 0x4071D9: initialize (dproc.c:655)
+    ==13858==    by 0x41C99D: main (main.c:1253)
+    ==13858==  Address 0x1ffeff9e60 is on thread 1's stack
+    ==13858==  in frame #1, created by doinchild (misc.c:247)
+    ==13858==  Uninitialised value was created by a stack allocation
+    ==13858==    at 0x41E149: doinchild (misc.c:247)
+    ==13858==
+    ==13858== ERROR SUMMARY: 199 errors from 1 contexts (suppressed: 0 from 0)
+
+The code causing the erros seems harmless. However, keeping the output
+of valgrind clean may be good for continuing maintaining lsof.
+
+No update for 00DIST because this change is invisble to users.
+
+Signed-off-by: Masatake YAMATO <yamato@redhat.com>
+---
+ misc.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/misc.c b/misc.c
+index be051609..3bebdc58 100644
+--- a/misc.c
++++ b/misc.c
+@@ -360,6 +360,7 @@ doinchild(fn, fp, rbuf, rbln)
+ 			    != (int)sizeof(r_rbln)
+ 			||  r_rbln < 1 || r_rbln > (int)sizeof(r_rbuf))
+ 			    break;
++			zeromem (r_rbuf, r_rbln);
+ 			rv = r_fn(r_arg, r_rbuf, r_rbln);
+ 			en = errno;
+ 			if (write(Pipes[3], (char *)&rv, sizeof(rv))
