@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.93.2
-Release:        7
+Release:        8
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -48,19 +48,25 @@ install -p -m 0644 lsof.1 %{buildroot}/%{_mandir}/man1/lsof.1
 %{_mandir}/man*/*
 
 %changelog
+* Wed Nov 16 2022 dongyuzhen <dongyuzhen@h-partners.com> - 4.93.2-8
+- Type:bugfix
+- ID:NA
+- SUG:NA
+- DESC:fix the date error in changelog
+
 * Tue Nov 15 2022 Bin Hu <hubin73@huawei.com> - 4.93.2-7
 - Type:bugfix
 - ID:NA
 - SUG:NA
 - DESC:fix valgrind error write to uninitialized bytes
 
-* Wed Aug 24 2022 yueyuankun<yueyuankun@kylinos.cn> - 4.93.2-6
+* Wed Aug 24 2022 yueyuankun <yueyuankun@kylinos.cn> - 4.93.2-6
 - Type:bugfix
 - ID:NA
 - SUG:NA
 - DESC:Fix "man lsof" content error
 
-* Wed Feb 10 2020 chenjialong<chenjialong@huawei.com> - 4.93.2-5
+* Wed Feb 10 2021 chenjialong <chenjialong@huawei.com> - 4.93.2-5
 - Type:NA
 - ID:NA
 - SUG:NA
