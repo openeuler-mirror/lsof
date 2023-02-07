@@ -1,8 +1,8 @@
 Name:		lsof
-Version:	4.96.4
-Release:	2
+Version:	4.97.0
+Release:	1
 Summary:	A tool for list open files
-License:	zlib and Sendmail and LGPLv2+
+License:	Zlib and Sendmail and LGPL-2.0-or-later
 URL:		https://people.freebsd.org/~abe/
 Source0:	https://github.com/lsof-org/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
@@ -50,6 +50,9 @@ popd
 %{_mandir}/man*/*
 
 %changelog
+* Wed Feb 1 2023 wangjunqi <wangjunqi@kylinos.cn> - 4.97.0-1
+- update version to 4.97.0
+
 * Wed Nov 16 2022 dongyuzhen <dongyuzhen@h-partners.com> - 4.96.4-2
 - Type:bugfix
 - ID:NA
