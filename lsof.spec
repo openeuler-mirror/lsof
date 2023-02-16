@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.93.2
-Release:        6
+Release:        7
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
@@ -37,6 +37,13 @@ install -p -m 0755 lsof %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_mandir}/man1
 install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
 
+%check
+pushd tests
+chmod u+w TestDB
+./Add2TestDB
+make test %{?_smp_mflags} DEBUG="%{optflags} -Wall -Wno-unused"
+popd
+
 %files
 %doc 00CREDITS
 %{_bindir}/%{name}
@@ -46,6 +53,12 @@ install -p -m 0644 Lsof.8 %{buildroot}/%{_mandir}/man1/lsof.1
 %{_mandir}/man*/*
 
 %changelog
+* Thu Feb 16 2023 hubin <hubin73@huawei.com> - 4.93.2-7
+- Type:testcode
+- ID:NA
+- SUG:NA
+- DESC:enable make check
+
 * Tue Nov 15 2022 dongyuzhen <dongyuzhen@h-partners.com> - 4.93.2-6
 - fix the date error in changelog
 
