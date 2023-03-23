@@ -1,0 +1,42 @@
+From f637ed601195685e23d2b60deb3b40ed96919978 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Tue, 17 Jan 2023 09:28:21 +0800
+Subject: [PATCH] [linux] Fix potential null pointer argument to strncpy,
+ reported by clang-analyzer
+
+---
+ arg.c                  | 2 +-
+ dialects/linux/dproc.c | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arg.c b/arg.c
+index 467e774..d001303 100644
+--- a/arg.c
++++ b/arg.c
+@@ -2083,7 +2083,7 @@ enter_state_spec(ss)
+ 		*cp = '\0';
+ 		cp++;
+ 	    }
+-	    if (!(len = (size_t)(ne - ns))) {
++	    if (!(size_t)(ne - ns)) {
+ 		(void) fprintf(stderr, "%s: NULL %s state name in: %s\n",
+ 		    Pn, pr, ss);
+ 		err = 1;
+diff --git a/dialects/linux/dproc.c b/dialects/linux/dproc.c
+index 17025de..a1d1276 100644
+--- a/dialects/linux/dproc.c
++++ b/dialects/linux/dproc.c
+@@ -356,7 +356,9 @@ gather_proc_info()
+ 	 * options work properly.
+ 	 */
+ 	    else if (!IgnTasks && (Selflags & SELTASK)) {
+-		strncpy(cmdbuf, cmd, sizeof(cmdbuf) - 1);
++		if (cmd) {
++		    strncpy(cmdbuf, cmd, sizeof(cmdbuf) - 1);
++		}
+ 		cmdbuf[sizeof(cmdbuf) - 1] = '\0';
+ 		cmd = cmdbuf;
+ 		(void) make_proc_path(pidpath, n, &taskpath, &taskpathl,
+-- 
+2.27.0
+
