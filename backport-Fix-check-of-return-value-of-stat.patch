@@ -1,0 +1,25 @@
+From 66fe6dc5ae282dbd488c19e4d9ff0be8128a4aad Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Mon, 16 Jan 2023 19:30:28 +0800
+Subject: [PATCH] Fix check of return value of stat()
+
+---
+ dialects/linux/dsock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dialects/linux/dsock.c b/dialects/linux/dsock.c
+index 0e1acf6..1fce1d9 100644
+--- a/dialects/linux/dsock.c
++++ b/dialects/linux/dsock.c
+@@ -3569,7 +3569,7 @@ get_unix(p)
+ 		    sr = statsafely(path, &sb);
+ 		else
+ 		    sr = stat(path, &sb);
+-		if (sr && ((sb.st_mode & S_IFMT) == S_IFSOCK)) {
++		if (sr == 0 && ((sb.st_mode & S_IFMT) == S_IFSOCK)) {
+ 		    up->sb_def = 1;
+ 		    up->sb_dev = sb.st_dev;
+ 		    up->sb_ino = (INODETYPE)sb.st_ino;
+-- 
+2.27.0
+
