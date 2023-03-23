@@ -1,0 +1,28 @@
+From afb159fa4b56bf51d5dfecf442556a6cd31423c7 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Wed, 18 Jan 2023 22:18:44 +0800
+Subject: [PATCH] Fix empty process name testcase to allow the dialect to not
+ report changed command name
+
+---
+ tests/case-22-empty-process-name.bash | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tests/case-22-empty-process-name.bash b/tests/case-22-empty-process-name.bash
+index ce4039c..5aa8113 100755
+--- a/tests/case-22-empty-process-name.bash
++++ b/tests/case-22-empty-process-name.bash
+@@ -19,7 +19,9 @@ source tests/common.bash
+ 		exit 1
+ 	    fi
+ 	elif [[ $entry =~ c* ]]; then
+-	    if [[ $entry != c ]]; then
++	    if [[ $entry =~ cperl* ]]; then
++	        echo "The platform does not report changed command name, that's okay" >> $report
++	    elif [[ $entry != c ]]; then
+ 	        echo "Process name should be empty, expect c, got $entry" >> $report
+ 		exit 1
+ 	    fi
+-- 
+2.27.0
+

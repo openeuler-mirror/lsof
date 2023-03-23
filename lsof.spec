@@ -1,10 +1,15 @@
 Name:		lsof
 Version:	4.97.0
-Release:	1
+Release:	2
 Summary:	A tool for list open files
 License:	Zlib and Sendmail and LGPL-2.0-or-later
 URL:		https://people.freebsd.org/~abe/
 Source0:	https://github.com/lsof-org/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+
+Patch1:         backport-Check-if-h_addr-non-null-before-memcpy.patch
+Patch2:         backport-Check-h_addr_list-0-before-accessing-1.patch
+Patch3:         backport-linux-Fix-handling-of-empty-command-name-closing-246.patch
+Patch4:         backport-Fix-empty-process-name-testcase-to-allow-the-dialect.patch
 
 BuildRequires:	gcc libtirpc-devel libselinux-devel
 
@@ -50,6 +55,9 @@ popd
 %{_mandir}/man*/*
 
 %changelog
+* Thu Mar 23 2023 yixiangzhike <yixiangzhike007@163.cn> - 4.97.0-2
+- backport patches from upstream
+
 * Wed Feb 1 2023 wangjunqi <wangjunqi@kylinos.cn> - 4.97.0-1
 - update version to 4.97.0
 
