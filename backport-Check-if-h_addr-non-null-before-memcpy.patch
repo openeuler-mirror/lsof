@@ -1,0 +1,26 @@
+From 7f74854bad25fa401cb3e739f5aeb269efd1555f Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Wed, 18 Jan 2023 00:16:21 +0800
+Subject: [PATCH] Check if h_addr non-null before memcpy
+
+It triggered segfaults on Fedora 37 CI.
+---
+ arg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arg.c b/arg.c
+index d001303..4e906e9 100644
+--- a/arg.c
++++ b/arg.c
+@@ -2471,7 +2471,7 @@ lkup_hostnm(hn, n)
+ 	he = gethostbyname(hn);
+ #endif	/* defined(HASIPv6) */
+ 
+-	if (!he)
++	if (!he || !he->h_addr)
+ 	    return(he);
+ /*
+  * Copy first hostname structure address to destination structure.
+-- 
+2.27.0
+
