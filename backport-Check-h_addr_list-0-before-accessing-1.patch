@@ -1,0 +1,26 @@
+From d6ad8e0850e22098f9d46373454aa2f575434630 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Wed, 18 Jan 2023 00:34:25 +0800
+Subject: [PATCH] Check h_addr_list[0] before accessing [1]
+
+It triggered segfaults on Fedora 37 CI.
+---
+ arg.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arg.c b/arg.c
+index 4e906e9..818fc58 100644
+--- a/arg.c
++++ b/arg.c
+@@ -1926,6 +1926,8 @@ enter_nwad(n, sp, ep, s, he)
+ 	 */
+ 	    if (!he)
+ 		break;
++	    if (!he->h_addr_list[ac-1]) /* Check if address list ended prematurely */
++		break;
+ 	    if (!(ap = (unsigned char *)he->h_addr_list[ac++]))
+ 		break;
+ 
+-- 
+2.27.0
+
