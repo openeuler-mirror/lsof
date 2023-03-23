@@ -1,10 +1,18 @@
 Name:		lsof
 Version:	4.94.0
-Release:        4
+Release:        5
 Summary:	A tool for list open files
 License:	zlib and Sendmail and LGPLv2+
 URL:		https://people.freebsd.org/~abe/
 Source0:	https://github.com/lsof-org/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+
+Patch1:         backport-Fix-check-of-return-value-of-stat.patch
+Patch2:         backport-linux-Fix-potential-oob-write.patch
+Patch3:         backport-linux-Fix-potential-null-pointer-argument-to-strncpy.patch
+Patch4:         backport-Check-if-h_addr-non-null-before-memcpy.patch
+Patch5:         backport-Check-h_addr_list-0-before-accessing-1.patch
+Patch6:         backport-linux-Fix-handling-of-empty-command-name-closing-246.patch
+Patch7:         backport-Fix-empty-process-name-testcase-to-allow-the-dialect.patch
 
 BuildRequires:	gcc git libtirpc-devel libselinux-devel
 
@@ -50,6 +58,9 @@ popd
 %{_mandir}/man*/*
 
 %changelog
+* Thu Mar 23 2023 yixiangzhike <yixiangzhike007@163.com> - 4.94.0-5
+- backport patches from upstream
+
 * Tue Nov 15 2022 dongyuzhen <dongyuzhen@h-partners.com> - 4.94.0-4
 - fix the format error in changelog
 
