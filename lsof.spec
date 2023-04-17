@@ -1,6 +1,6 @@
 Name:		lsof
 Version:	4.97.0
-Release:	2
+Release:	3
 Summary:	A tool for list open files
 License:	Zlib and Sendmail and LGPL-2.0-or-later
 URL:		https://people.freebsd.org/~abe/
@@ -29,7 +29,7 @@ The %{name}-help package contains doc files for %{name}.
 %autosetup -n %{name}-%{version} -p1
 
 %build
-./Configure -n linux
+LSOF_CC=$CC ./Configure -n linux
 %make_build DEBUG="%{build_cflags} -I/usr/include/tirpc" CFGL="%{build_ldflags} -L./lib -llsof -lselinux -ltirpc"
 soelim -r Lsof.8 > lsof.1
 
@@ -55,6 +55,9 @@ popd
 %{_mandir}/man*/*
 
 %changelog
+* Mon Apr 17 2023 jammyjellyfish <jammyjellyfish255@outlook.com> - 4.97.0-3
+- Support specify CC
+
 * Thu Mar 23 2023 yixiangzhike <yixiangzhike007@163.cn> - 4.97.0-2
 - backport patches from upstream
 
